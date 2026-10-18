@@ -1,121 +1,11 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi Karyawan Delta</title>
-    
-    <!-- Panggilan Library Firebase (Menggunakan SDK v9 Compat agar stabil dengan script lokal) -->
-    <script defer src="https://gstatic.com"></script>
-    <script defer src="https://gstatic.com"></script>
-
-
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .login-container {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 8px;
-        }
-        h3 {
-            color: #666;
-            font-weight: 500;
-            margin-bottom: 25px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: #555;
-            font-size: 14px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-        }
-        .input-group input:focus {
-            border-color: #1e3c72;
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            background: #007bff;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-submit:hover {
-            background: #0056b3;
-        }
-        .error-message {
-            color: #dc3545;
-            background: #f8d7da;
-            padding: 10px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-size: 14px;
-            display: none;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-
-<div class="login-container">
-    <h2>Sistem Informasi Karyawan Delta</h2>
-    <h3>Login Karyawan</h3>
-    
-    <form id="loginForm">
-        <div class="input-group">
-            <label for="username">ID Karyawan / Email</label>
-            <input type="text" id="username" placeholder="Masukkan ID atau Email Anda" required autocomplete="username">
-        </div>
-        <div class="input-group">
-            <label for="password">Kata Sandi</label>
-            <input type="password" id="password" placeholder="Masukkan Password Anda" required autocomplete="current-password">
-        </div>
-        <button type="submit" class="btn-submit">Masuk</button>
-    </form>
-
-    <div id="error-message" class="error-message"></div>
-</div>
+<!-- Pastikan CDN Firebase ini ada di bagian atas kode Anda -->
+<script src="https://gstatic.com"></script>
+<script src="https://gstatic.com"></script>
 
 <script>
-    // 1. KONFIGURASI FIREBASE PROYEK ANDA
+    // 1. ISI DENGAN KONFIGURASI FIREBASE MILIK ANDA
     const firebaseConfig = {
-        apiKey: "AIzaSy...", // Masukkan apiKey asli Anda di sini jika berbeda
+        apiKey: "AIzaSy...", 
         authDomain: "://firebaseapp.com",
         projectId: "chemis-delta",
         storageBucket: "://appspot.com",
@@ -128,7 +18,7 @@
         firebase.initializeApp(firebaseConfig);
     }
 
-    // 2. LOGIKA PROSES LOGIN
+    // 2. LOGIKA PROSES LOGIN RESMI FIREBASE
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Mencegah halaman reload otomatis
 
@@ -136,30 +26,31 @@
         const passwordInput = document.getElementById('password').value;
         const errorDiv = document.getElementById('error-message');
 
-        // Sembunyikan pesan error sebelumnya
-        errorDiv.style.display = 'none';
+        if(errorDiv) errorDiv.style.display = 'none';
 
-        // OTOMATISASI DOMAIN EMAIL: Jika user tidak mengetik '@', sistem otomatis menambahkan domain
+        // OTOMATISASI EMAIL: Jika user hanya mengetik 'jojoanugrah' atau 'delta', 
+        // sistem akan otomatis menambahkan '@rayon1.com' di latar belakang
         let formattedEmail = userInput;
         if (!userInput.includes('@')) {
             formattedEmail = userInput + "@rayon1.com";
         }
 
-        // Proses Otentikasi ke Firebase Server
+        // Memanggil fungsi Firebase Auth untuk memeriksa akun ke server Cloud
         firebase.auth().signInWithEmailAndPassword(formattedEmail, passwordInput)
             .then((userCredential) => {
-                // JIKA LOGIN SUKSES -> Alihkan ke Google Sheets data absensi
+                // JIKA AKUN COCOK DI FIREBASE AUTH -> Alihkan ke Google Sheets
                 alert("Login Berhasil! Selamat bekerja.");
                 window.location.href = "https://docs.google.com/spreadsheets/d/13LOxjXsBtLFwIvIU4b8btCa2Xnr-nfov86aEz-6lnHo/edit?usp=sharing"; // GANTI DENGAN LINK GOOGLE SHEETS ANDA
             })
             .catch((error) => {
-                // JIKA LOGIN GAGAL -> Munculkan pesan error di layar
-                console.error("Firebase Auth Error: ", error.code, error.message);
-                errorDiv.innerText = "❌ ID Karyawan atau Password Salah!";
-                errorDiv.style.display = 'block';
+                // JIKA AKUN TIDAK COCOK ATAU BELUM TERDAFTAR DI AUTH
+                console.error("Firebase Error: ", error.message);
+                if(errorDiv) {
+                    errorDiv.innerText = "❌ ID Karyawan atau Password Salah!";
+                    errorDiv.style.display = 'block';
+                } else {
+                    alert("ID Karyawan atau Password Salah!");
+                }
             });
     });
 </script>
-
-</body>
-</html>
