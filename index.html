@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Absensi & Laporan Kerja</title>
+
+    <style>
+        /* GAYA TAMPILAN (CSS) */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 450px; }
+        h2, h3 { text-align: center; color: #333; }
+        .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; background-color: #007bff; }
+        .status { font-size: 14px; text-align: center; color: #666; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sistem Informasi Karyawan Delta</h2>
+
+        <!-- FORM LOGIN -->
+        <div id="loginSection" class="card">
+            <h3>Login Karyawan</h3>
+            <input type="text" id="loginId" placeholder="Masukkan ID Karyawan (Contoh: delta)" required>
+            <input type="password" id="loginPassword" placeholder="Masukkan Password" required>
+            <button class="btn" onclick="login()">Masuk</button>
+            <div id="statusLogin" class="status"></div>
+        </div>
+    </div>
+
+    <script>
+        // FUNGSI LOGIN DIREKTUR TANPA DEPENDENSI FIREBASE EXTERNAL
+        function login() {
+            const idKaryawan = document.getElementById('loginId').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const statusText = document.getElementById('statusLogin');
+
+            if (!idKaryawan || !password) {
+                alert("ID dan Password wajib diisi!");
+                return;
+            }
+
+            statusText.innerText = "Memverifikasi...";
+            statusText.style.color = "#666";
+
+            // LOGIKA VALIDASI LOKAL (Silakan sesuaikan ID dan Password yang Anda inginkan di sini)
+            if (idKaryawan.toLowerCase() === "delta" && password === "Admin123") {
+                statusText.innerText = "✅ Login Berhasil! Mengalihkan...";
+                statusText.style.color = "green";
+                
+                // Langsung berpindah halaman ke Google Sheet Anda di tab yang sama
+                window.location.href = "https://docs.google.com/spreadsheets/d/13LOxjXsBtLFwIvIU4b8btCa2Xnr-nfov86aEz-6lnHo/edit?usp=sharing";
+            } else {
+                statusText.innerText = "❌ ID Karyawan atau Password Salah!";
+                statusText.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
